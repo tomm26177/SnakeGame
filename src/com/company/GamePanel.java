@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     static final int screen_width = 1000;
     static final int screen_height = 1000;
-    static final int unitsize = 50;
+    static final int unitsize = 40;
     static final int game_unit = (screen_width * screen_height) / unitsize;
     static final int delay = 100;
     static int[] x = new int[game_unit];
@@ -23,6 +23,9 @@ public class GamePanel extends JPanel implements ActionListener {
     int appleY;
     char direction = 'R';
     boolean running = false;
+    JButton button = new JButton("TRY AGAIN");
+
+
 
 
     Timer timer;
