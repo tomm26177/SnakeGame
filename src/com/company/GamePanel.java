@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     static final int screen_width = 1000;
     static final int screen_height = 1000;
-    static final int unitsize = 40;
+    static final int unitsize = 50;
     static final int game_unit = (screen_width * screen_height) / unitsize;
     static final int delay = 100;
     static int[] x = new int[game_unit];
@@ -23,9 +23,14 @@ public class GamePanel extends JPanel implements ActionListener {
     int appleY;
     char direction = 'R';
     boolean running = false;
-    JButton button = new JButton("TRY AGAIN");
+    JButton tryagainbutton = new JButton();
+    ImageIcon icon = new ImageIcon("istockphoto-1347146680-612x612.jpg");
+    int imageIconHeight = icon.getIconHeight();
+    int imageIconWeight = icon.getIconWidth();
 
-
+    JButton settings = new JButton("settings");
+    int settingsH = 50;
+    int settingsW = 100;
 
 
     Timer timer;
@@ -80,13 +85,13 @@ public class GamePanel extends JPanel implements ActionListener {
                 g.setColor(Color.red);
                 g.setFont(new Font("ink free", Font.BOLD, 20));
                 FontMetrics metrics = getFontMetrics(g.getFont());
-                g.drawString("Wynik: " + appellate,
+                g.drawString("SCORE : " + appellate,
                         (screen_width - metrics.stringWidth("Wynik")) / 2,
                         g.getFont().getSize());
 
             }
         } else {
-            gameOver(g);
+            GameLobby(g);
 
 
         }
@@ -140,6 +145,7 @@ public class GamePanel extends JPanel implements ActionListener {
             if ((x[0] == x[i]) && (y[0] == y[i])) {
 
                 running = false;
+                break;
             }
         }
         //check if head touches left
@@ -166,26 +172,43 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
-    public void gameOver(Graphics g) {
+    public void GameLobby(Graphics g) {
 
 
         g.setColor(Color.red);
-        g.setFont(new Font("ink free", Font.BOLD, 70));
+        g.setFont(new Font("ink free", Font.BOLD, 100));
         FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString("GAME OVER", (screen_width - metrics.stringWidth("GAME OVER")) / 2, screen_height / 2);
+        g.drawString("SNAKE", (screen_width - metrics.stringWidth("SNAKE")) / 2, screen_height / 2);
+
+        if (appellate > 0) {
+            g.setFont(new Font("ink free", Font.BOLD, 50));
+            FontMetrics metrics2 = getFontMetrics(g.getFont());
+            g.drawString("SCORE: " + appellate,
+                    (screen_width - metrics2.stringWidth("SCORE ")) / 2,
+                    screen_height / 3);
+        }
+
+        tryagainbutton.setSize(screen_width / 9, screen_height / 20);
+        if(appellate==0) {
+            tryagainbutton.setText("PLAY");
+        }else {
+            tryagainbutton.setText("PLAY AGAIN");
+        }
+        tryagainbutton.setVisible(true);
+        tryagainbutton.setLocation(screen_width / 2 - (screen_width / 10) / 2, screen_height / 2 + 100);
+
+        tryagainbutton.addActionListener(this);
 
 
-        g.setFont(new Font("ink free", Font.BOLD, 50));
-        FontMetrics metrics2 = getFontMetrics(g.getFont());
-        g.drawString("SCORE: " + appellate,
-                (screen_width - metrics2.stringWidth("SCORE ")) / 2,
-                screen_height / 3);
+        settings.addActionListener(this);
+        settings.setSize(settingsW, settingsH);
+        settings.setBackground(Color.gray);
 
 
+        settings.setLocation(screen_width - settingsW * 2, settingsH - settingsH * 2);
+        settings.setVisible(true);
 
-
-
-
+        this.add(tryagainbutton);
     }
 
 
@@ -217,6 +240,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
 
         }
+
     }
 
     @Override
@@ -227,14 +251,24 @@ public class GamePanel extends JPanel implements ActionListener {
             move();
             checkapple();
             checkcolistons();
-
-        }
-        repaint();
-
-
-
-
+            repaint();
         }
 
+
+        if (e.getSource() == tryagainbutton) {
+
+            appellate = 0;
+            tryagainbutton.setVisible(false);
+            bodyparts = 5;
+            x[0] = unitsize;
+            y[0] = unitsize;
+            direction = 'R';
+            running = true;
+            timer.start();
+
+        }
     }
+
+
+}
 
